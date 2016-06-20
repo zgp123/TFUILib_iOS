@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name         = 'TFUILib'
-s.version      = '0.0.31'
+s.version      = '0.1'
 s.summary      = 'TFUILib'
 s.description  = <<-DESC
                  TFUILib description
