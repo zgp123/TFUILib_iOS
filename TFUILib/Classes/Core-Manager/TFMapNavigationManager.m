@@ -23,6 +23,7 @@ void bd_encrypt(double gg_lat, double gg_lon, double *bd_lat, double *bd_lon)
 //百度坐标转火星
 void bd_decrypt(double bd_lat, double bd_lon, double *gg_lat, double *gg_lon)
 {
+    
     double x = bd_lon - 0.0065, y = bd_lat - 0.006;
     double z = sqrt(x * x + y * y) - 0.00002 * sin(y * tfx_pi);
     double theta = atan2(y, x) - 0.000003 * cos(x * tfx_pi);
