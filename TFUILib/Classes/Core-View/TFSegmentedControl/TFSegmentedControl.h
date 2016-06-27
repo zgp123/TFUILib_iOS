@@ -78,13 +78,27 @@ typedef void (^TFSegmentedControlTouchBlock)(NSString*title, NSInteger index);
  *
  *  @param frame    尺寸
  *  @param titleArr 每个page对应title
- *  @param viewArr  每个page对应view  view  或者viewController
  *  @param block    按钮点击事件的回调
  *
  *  @return TFSegmentedControl
  */
 - (id)initWithFrame:(CGRect)frame
              titles:(NSArray *)titleArr
+              block:(TFSegmentedControlTouchBlock)block;
+
+/**
+ *  初始化TFSegmentedView
+ *
+ *  @param frame          尺寸
+ *  @param imageNormelArr 正常情况下的图片
+ *  @param imageSelectArr 选中情况下的图片
+ *  @param block          按钮点击事件的回调
+ *
+ *  @return TFSegmentedControl
+ */
+- (id)initWithFrame:(CGRect)frame
+     imageNormelArr:(NSArray *)imageNormelArr
+     imageSelectArr:(NSArray *)imageSelectArr
               block:(TFSegmentedControlTouchBlock)block;
 
 /**

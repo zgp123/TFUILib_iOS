@@ -17,6 +17,9 @@
 
 @property (nonatomic, strong) UIView *lineView;
 
+@property (nonatomic, strong) NSArray *imageNormelArr;
+
+@property (nonatomic, strong) NSArray *imageSelectArr;
 
 
 @end
@@ -47,17 +50,46 @@
         self.titleHeight        = frame.size.height;
         self.titleColor         = HEXCOLOR(0x333333, 1);
         self.titleSelectedColor = HEXCOLOR(0x03a9f4, 1);
-
+        
         self.lineColor          = HEXCOLOR(0X03A9F4,  1);
         self.lineHeight         = 2;
-
+        
         self.titleArr           = [self createTitleArr:titleArr];
-
+        
         self.block              = block;
         
         [self initViews];
         [self autolayoutViews];
         [self bindData];
+    }
+    
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame
+     imageNormelArr:(NSArray *)imageNormelArr
+     imageSelectArr:(NSArray *)imageSelectArr
+              block:(TFSegmentedControlTouchBlock)block;
+{
+    if (self = [super initWithFrame:frame])
+    {
+        _selectedIndex          = 0;
+        self.titleHeight        = frame.size.height;
+        self.titleColor         = HEXCOLOR(0x333333, 1);
+        self.titleSelectedColor = HEXCOLOR(0x03a9f4, 1);
+        
+        self.lineColor          = HEXCOLOR(0X03A9F4,  1);
+        self.lineHeight         = 2;
+        
+        self.imageNormelArr = imageNormelArr;
+        self.imageSelectArr = imageSelectArr;
+        self.block              = block;
+        self.titleArr = [self createTitleArr:nil];
+        
+        [self initViews];
+        [self autolayoutViews];
+        [self bindData];
+        
     }
     
     return self;
@@ -119,6 +151,14 @@
     {
         UIButton *btn = self.titleArr[i];
         [btn setTitleColor:page == btn.tag?self.titleSelectedColor:self.titleColor forState:UIControlStateNormal];
+        if (page == btn.tag)
+        {
+            btn.selected = YES;
+        }
+        else
+        {
+            btn.selected = NO;
+        }
     }
     
     int left=self.lineView.width*page;
@@ -133,10 +173,10 @@
     // 调用此方法告诉self.view检测是否需要更新约束，若需要则更新，下面添加动画效果才起作用
     [self updateConstraintsIfNeeded];
     
-    [UIView animateWithDuration:0.3 animations:^{
-        
-        [self layoutIfNeeded];
-    }];
+    //    [UIView animateWithDuration:0.3 animations:^{
+    
+    [self layoutIfNeeded];
+    //    }];
     
     if (self.block)
     {
@@ -155,14 +195,37 @@
     NSMutableArray *tmpArr = [[NSMutableArray alloc]init];
     
     NSInteger count = arr.count;
+    if (arr.count == 0)
+    {
+        count = self.imageSelectArr.count;
+    }
     for (int i = 0; i < count; i ++)
     {
         UIButton *btn = UIButton.new;
         
         btn.backgroundColor = [UIColor clearColor];
-        [btn setTitle:arr[i] forState:UIControlStateNormal];
+        if (arr)
+        {
+            [btn setTitle:arr[i] forState:UIControlStateNormal];
+        }
+        if (self.imageNormelArr.count>0)
+        {
+            [btn setImage:[UIImage imageNamed:self.imageNormelArr[i]] forState:UIControlStateNormal];
+        }
+        
+        if (self.imageSelectArr)
+        {
+            
+            [btn setImage:[UIImage imageNamed:self.imageSelectArr[i]] forState:UIControlStateSelected];
+        }
         [btn setTitleColor:self.titleColor forState:UIControlStateNormal];
         [btn addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];
+        
+        if (i == 0)
+        {
+            btn.selected = YES;
+        }
+        
         btn.tag = i;
         btn.titleLabel.font = FONT_BY_PIXEL(26, 28 , 42);
         
